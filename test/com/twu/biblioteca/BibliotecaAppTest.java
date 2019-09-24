@@ -26,8 +26,8 @@ public class BibliotecaAppTest {
     public void viewAllBooks(){
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        BibliotecaApp.viewAllBooks();
-        assertThat(outContent.toString(), is(equalTo("Book 1\nBook 2\nBook 3\n")));
+        Book.viewAllBooks();
+        assertThat(outContent.toString(), is(equalTo("Kurt Vonnegut - Slaughterhouse-Five (1969)\nRay Bradbury - Fahrenheit 451 (1953)\n")));
     }
 
 }
