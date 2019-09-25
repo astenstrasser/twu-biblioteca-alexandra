@@ -11,11 +11,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 
-
 public class LibraryTest {
 
     @Test
-    public void shouldShowWelcomeMessageWhenNewLibrary(){
+    public void shouldShowWelcomeMessageWhenNewLibrary() {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         Library.welcomeMessage();
@@ -23,7 +22,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void shouldShowListOfAllBooks(){
+    public void shouldShowListOfAllBooks() {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         Library.showAllBooks();
