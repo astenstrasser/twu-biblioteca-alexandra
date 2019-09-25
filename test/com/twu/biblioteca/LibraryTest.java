@@ -23,18 +23,6 @@ public class LibraryTest {
     }
 
     @Test
-    public void menu_shouldShowListOfBooksWhenUserChooseOptionOne(){
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        int inputOption = 1;
-        Library.menu(inputOption);
-
-        assertThat(outContent.toString(), CoreMatchers.containsString("Menu of options"));
-        assertThat(outContent.toString(), CoreMatchers.containsString("Kurt Vonnegut"));
-        assertThat(outContent.toString(), CoreMatchers.containsString("Ray Bradbury"));
-    }
-
-    @Test
     public void shouldShowListOfAllBooks(){
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -42,5 +30,6 @@ public class LibraryTest {
         assertThat(outContent.toString(), CoreMatchers.containsString("Kurt Vonnegut"));
         assertThat(outContent.toString(), CoreMatchers.containsString("Ray Bradbury"));
     }
+
 
 }
