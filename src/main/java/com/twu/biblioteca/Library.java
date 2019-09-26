@@ -1,13 +1,20 @@
 package com.twu.biblioteca;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Library {
 
+    private ArrayList<Book> books;
+    public Menu menu;
+
     public Library() {
+        this.books = getAllBooks();
+        this.menu = new Menu(this);
+    }
+
+    public void runLibrary(){
         welcomeMessage();
-        Menu menu = new Menu();
+        this.menu.displayMenu();
     }
 
     public static void welcomeMessage() {
@@ -22,9 +29,8 @@ public class Library {
         return books;
     }
 
-    public static void showAllBooks() {
-        ArrayList<Book> books = getAllBooks();
-        books.forEach(book -> System.out.println(book.getAuthor() + " - " + book.getTitle() + " (" + book.getPublicationYear() + ")"));
+    public void showAllBooks() {
+        this.books.forEach(book -> System.out.println(book.getAuthor() + " - " + book.getTitle() + " (" + book.getPublicationYear() + ")"));
     }
 }
 

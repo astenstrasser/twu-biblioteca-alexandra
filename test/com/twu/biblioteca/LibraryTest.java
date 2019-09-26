@@ -25,7 +25,8 @@ public class LibraryTest {
     public void shouldShowListOfAllBooks() {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        Library.showAllBooks();
+        Library library = new Library();
+        library.showAllBooks();
         assertThat(outContent.toString(), CoreMatchers.containsString("Kurt Vonnegut"));
         assertThat(outContent.toString(), CoreMatchers.containsString("Ray Bradbury"));
     }
