@@ -6,8 +6,6 @@ import java.util.List;
 public class BibliotecaApp {
 
     public static void main(String[] args) {
-
-
         Library library = new Library();
 
         library.addBook(new Book("Fahrenheit 451", "Ray Bradbury", 1953));
@@ -15,5 +13,4 @@ public class BibliotecaApp {
 
         library.runLibrary();
     }
-
 }
