@@ -18,10 +18,17 @@ import static org.mockito.Mockito.*;
 public class MenuTest {
 
     Library library;
+    Book bookOne;
+    Book bookTwo;
 
     @Before
-    public void setUp(){
-        library = new Library();
+    public void TestSetup(){
+        this.library = new Library();
+        this.bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
+        this.bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
+
+        library.addBook(bookOne);
+        library.addBook(bookTwo);
     }
 
     @Test
@@ -46,7 +53,7 @@ public class MenuTest {
     }
 
 //    @Test
-//    public void shouldShowMenuProperlyWhenDisplayMenuIsCalled() {
+//    public void shouldShowMenuAgainWhenInvalidOption() {
 //        Scanner scannerMock = mock(Scanner.class, "scannerMock");
 //        verify(scannerMock, times(2)).nextInt(2);
 //
@@ -61,14 +68,14 @@ public class MenuTest {
         library.menu.redirectToUsersOption(0);
     }
 
-    @Test
-    public void shouldReturnToMenuWhenInputGivenIsNotInteger(){
+//    @Test
+//    public void shouldReturnToMenuWhenInputGivenIsNotInteger(){
 //        final ByteArrayOutputStream outContent = new ByteArrayOutputStreamArrayOutputStream();
 //        System.setOut(new PrintStream(outContent));
 //        String inputOption = "a";
 //        boolean isOptionValid = library.menu.redirectToUsersOption(inputOption);
 //        assertThat(outContent.toString(), CoreMatchers.containsString("Please select a valid option"));
 //        assertThat(isOptionValid, is(equalTo(false)));
-    }
+//    }
 
 }

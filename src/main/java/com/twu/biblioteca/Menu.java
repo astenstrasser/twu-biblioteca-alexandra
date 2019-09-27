@@ -12,7 +12,7 @@ public class Menu {
     }
 
     public void displayMenu(){
-        showOptions();
+        this.showOptions();
         int option = askUserOption();
         boolean isOptionValid = redirectToUsersOption(option);
         if (! isOptionValid ) {
