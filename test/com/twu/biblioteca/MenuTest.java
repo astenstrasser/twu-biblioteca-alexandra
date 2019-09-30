@@ -1,81 +1,119 @@
 package com.twu.biblioteca;
 
-import org.hamcrest.CoreMatchers;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Scanner;
-
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
 
 public class MenuTest {
 
-    Library library;
-    Book bookOne;
-    Book bookTwo;
+  private Library library;
+  private Book bookOne;
+  private Book bookTwo;
 
-    @Before
-    public void TestSetup(){
-        this.library = new Library();
-        this.bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
-        this.bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
+  @Before
+  public void TestSetup() {
+    this.library = new Library();
+    this.bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
+    this.bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
 
-        library.addBook(bookOne);
-        library.addBook(bookTwo);
-    }
+    library.addBook(bookOne);
+    library.addBook(bookTwo);
+  }
 
-    @Test
-    public void shouldShowListOfBooksWhenUserChooseOptionOne() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        int inputOption = 1;
-        library.menu.redirectToUsersOption(inputOption);
-        assertThat(outContent.toString(), CoreMatchers.containsString("Kurt Vonnegut"));
-        assertThat(outContent.toString(), CoreMatchers.containsString("Ray Bradbury"));
-    }
+  @Test
+  public void shouldGetAllMenuOptions() {
+    // given
+    Console console = new Console(System.in, System.out);
+    Menu menu = new Menu(library, console);
 
+    // when
+    String gotOptions = menu.getOptions();
 
-    @Test
-    public void shouldNotifyWhenUserChooseInvalidOption() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        int inputOption = -3;
-        boolean isOptionValid = library.menu.redirectToUsersOption(inputOption);
-        assertThat(outContent.toString(), CoreMatchers.containsString("Please select a valid option"));
-        assertThat(isOptionValid, is(equalTo(false)));
-    }
+    // then
+    Assertions.assertThat(gotOptions).contains("Menu of options");
+    Assertions.assertThat(gotOptions).contains("1: View the list of all books");
+    Assertions.assertThat(gotOptions).contains("0: Exit Biblioteca");
+  }
 
-//    @Test
-//    public void shouldShowMenuAgainWhenInvalidOption() {
-//        Scanner scannerMock = mock(Scanner.class, "scannerMock");
-//        verify(scannerMock, times(2)).nextInt(2);
-//
-//    }
+  @Test
+  public void shouldShowListOfBooks() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
 
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+    byte[] input = "1".getBytes();
+    InputStream in = new ByteArrayInputStream(input);
 
-    @Test
-    public void shouldExitWhenSelectedExitOptionOnMenu(){
-        exit.expectSystemExitWithStatus(0);
-        library.menu.redirectToUsersOption(0);
-    }
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
 
-//    @Test
-//    public void shouldReturnToMenuWhenInputGivenIsNotInteger(){
-//        final ByteArrayOutputStream outContent = new ByteArrayOutputStreamArrayOutputStream();
-//        System.setOut(new PrintStream(outContent));
-//        String inputOption = "a";
-//        boolean isOptionValid = library.menu.redirectToUsersOption(inputOption);
-//        assertThat(outContent.toString(), CoreMatchers.containsString("Please select a valid option"));
-//        assertThat(isOptionValid, is(equalTo(false)));
-//    }
+    // when
+    menu.handleInput();
 
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Kurt Vonnegut");
+    Assertions.assertThat(outContent.toString()).contains("Ray Bradbury");
+  }
+
+  @Test
+  public void shouldReturnInvalidOptionWhenInputIsNotOnMenu() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    byte[] input = "400\n0".getBytes();
+    InputStream in = new ByteArrayInputStream(input);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput();
+
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
+  }
+
+  @Test
+  public void shouldExitWhenSelectedExitOptionOnMenu() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    byte[] input = "0".getBytes();
+    InputStream in = new ByteArrayInputStream(input);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput();
+
+    // then
+    Assertions.assertThat(outContent.toString()).isEmpty();
+  }
+
+  @Test
+  public void shouldReturnToMenuWhenInputGivenIsNotInteger() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    byte[] input = "text\n0".getBytes();
+    InputStream in = new ByteArrayInputStream(input);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput();
+
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
+  }
 }

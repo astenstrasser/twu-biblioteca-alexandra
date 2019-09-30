@@ -1,60 +1,41 @@
 package com.twu.biblioteca;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class LibraryTest {
-    private static final Book BOOK_ONE = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
-    private static final Book BOOK_TWO = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);;
+  private static final Book BOOK_ONE = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
+  private static final Book BOOK_TWO = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
 
-    @Test
-    public void shouldShowWelcomeMessageWhenNewLibrary() {
-        // given
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+  @Test
+  public void AddBookToLibrary() {
+    // given
+    Library library = new Library();
 
-        // when
-        Library.welcomeMessage();
+    // when
+    library.addBook(BOOK_ONE);
 
-        // then
-        assertThat(outContent.toString()).isEqualTo("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n");
-    }
+    // then
+    assertThat(library.getBooks()).containsOnly(BOOK_ONE);
+  }
 
-    @Test
-    public void AddBookToLibrary(){
-        // given
-        Library library = new Library();
+  @Test
+  public void shouldReturnListOfAllBooks() {
+    // given
+    Library library = new Library();
 
-        // when
-        library.addBook(BOOK_ONE);
+    // when
+    library.addBook(BOOK_ONE);
+    library.addBook(BOOK_TWO);
+    List<Book> books = library.getBooks();
 
-        // then
-        assertThat(library.getBooks()).containsOnly(BOOK_ONE);
-    }
-
-    @Test
-    public void shouldShowListOfAllBooks() {
-        // given
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        Library library = new Library();
-
-        // when
-        library.addBook(BOOK_ONE);
-        library.addBook(BOOK_TWO);
-        library.showAllBooks();
-
-        // then
-        assertThat(outContent.toString()).contains("Kurt Vonnegut");
-        assertThat(outContent.toString()).contains("Ray Bradbury");
-        assertThat(library.getBooks().size()).isEqualTo(2);
-    }
-
-
+    // then
+    assertThat(books.get(0).getAuthor()).isEqualTo(BOOK_ONE.getAuthor());
+    assertThat(books.get(1).getAuthor()).isEqualTo(BOOK_TWO.getAuthor());
+    assertThat(books.size()).isEqualTo(2);
+  }
 }

@@ -1,58 +1,71 @@
 package com.twu.biblioteca;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.tools.internal.xjc.reader.Ring.add;
 
 public class Menu {
 
-    Library library;
+  private Library library;
+  private Console console;
 
-    public Menu(Library library) {
-        this.library = library;
-    }
-
-    public void displayMenu(){
-        this.showOptions();
-        int option = askUserOption();
-        boolean isOptionValid = redirectToUsersOption(option);
-        if (! isOptionValid ) {
-            displayMenu();
+  private static final List<Integer> VALID_OPTIONS =
+      new ArrayList<Integer>() {
+        {
+          add(1);
+          add(0);
         }
+      };
+
+  public Menu(Library library, Console console) {
+    this.library = library;
+    this.console = console;
+  }
+
+  public void displayMenu() {
+    this.console.write(
+        "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+    this.console.write(this.getOptions());
+    this.console.write("Select option: ");
+    handleInput();
+  }
+
+  public String getOptions() {
+    String options = "Menu of options:\n";
+    options += "    1: View the list of all books\n";
+    options += "    0: Exit Biblioteca";
+
+    return options;
+  }
+
+  public void handleInput() {
+
+    int option = this.console.ask();
+
+    switch (option) {
+      case 0:
+        return;
+      case 1:
+        showBooks();
+        break;
+      case Console.INVALID_INPUT:
+        console.write("Invalid Option. Please select a valid option");
+        displayMenu();
+        break;
+      default:
+        console.write("Invalid Option. Please select a valid option");
+        displayMenu();
+        break;
     }
+  }
 
-    public void showOptions() {
-        System.out.println("Menu of options:");
-        System.out.println("    1: View the list of all books");
-        System.out.println("    0: Exit biblioteca");
-    }
-
-    public int askUserOption() {
-        System.out.println("Select option: ");
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        try{
-            option = scanner.nextInt();
-        } catch (InputMismatchException e) {
-            option = -1;
-        }
-        return option;
-    }
-
-    public boolean redirectToUsersOption(int option) {
-        boolean isOptionValid = true;
-        switch (option) {
-            case 0:
-                System.exit(0);
-            case 1:
-                this.library.showAllBooks();
-                break;
-            default:
-                System.out.println("Invalid Option. Please select a valid option");
-                isOptionValid = false;
-                break;
-        }
-        return isOptionValid;
-    }
-
-
+  private void showBooks() {
+    library
+        .getBooks()
+        .forEach(
+            book -> {
+              this.console.write(book.toString());
+            });
+  }
 }
