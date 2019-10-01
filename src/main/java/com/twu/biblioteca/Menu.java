@@ -1,8 +1,5 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Menu {
 
   private Library library;
@@ -45,7 +42,12 @@ public class Menu {
         break;
       case 2:
         console.write("Please write the ID of the book you want to checkout");
-        library.checkoutBook(console.askBookId());
+        try {
+          library.checkoutBook(console.askBookId());
+          console.write("Thank you! Enjoy the book\n");
+        } catch (Exception e) {
+          console.write("No book found with given ID");
+        }
         displayMenu();
         break;
       case Console.INVALID_INPUT:

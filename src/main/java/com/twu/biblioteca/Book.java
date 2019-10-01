@@ -32,17 +32,17 @@ public class Book {
 
   @Override
   public String toString() {
-    return String.format("[ID: %s]      %s - %s (%s)", this.id, this.author, this.title, this.publicationYear);
+    return String.format(
+        "[ID: %s]      %s - %s (%s)", this.id, this.author, this.title, this.publicationYear);
   }
 
   public UUID getId() {
     return this.id;
   }
 
-  public boolean isAvailable(){
+  public boolean isAvailable() {
     return this.isAvailable;
   }
-
 
   public void checkout() {
     this.isAvailable = false;

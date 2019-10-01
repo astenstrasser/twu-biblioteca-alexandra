@@ -4,8 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.util.UUID;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 public class MenuTest {
 
@@ -75,7 +77,8 @@ public class MenuTest {
     menu.handleInput(2);
 
     // then
-    Assertions.assertThat(outContent.toString()).contains("Please write the ID of the book you want to checkout");
+    Assertions.assertThat(outContent.toString())
+        .contains("Please write the ID of the book you want to checkout");
   }
 
   @Test
@@ -132,16 +135,14 @@ public class MenuTest {
     Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
   }
 
-
   @Test
-  public void shouldChangeBookStatusWhenCheckingOutABook(){
+  public void shouldChangeBookStatusWhenCheckingOutABook() {
     // given
-    String input = bookOne.getId().toString()+"\n0";
+    String input = bookOne.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(input.getBytes());
 
     Console console = new Console(in, System.out);
     Menu menu = new Menu(library, console);
-
 
     // when
     menu.handleInput(2);
@@ -150,4 +151,22 @@ public class MenuTest {
     Assertions.assertThat(bookOne.isAvailable()).isEqualTo(false);
   }
 
+  @Test
+  public void shouldShowSuccessMessageOnCheckoutOfABook() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    String input = bookOne.getId().toString() + "\n0";
+    InputStream in = new ByteArrayInputStream(input.getBytes());
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput(2);
+
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Thank you! Enjoy the book");
+  }
 }

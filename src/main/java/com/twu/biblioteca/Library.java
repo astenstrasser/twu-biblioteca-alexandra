@@ -33,20 +33,16 @@ public class Library {
 
     boolean isBookOnLibrary = false;
     Book book = null;
-    for (Book b : this.books){
-      if ((b.getId().toString()).equals(givenBookId)){
+    for (Book b : this.books) {
+      if ((b.getId().toString()).equals(givenBookId)) {
         isBookOnLibrary = true;
         book = b;
       }
-
     }
-    if (isBookOnLibrary == true){
+    if (isBookOnLibrary == true) {
       book.checkout();
     } else {
       throw new NoSuchElementException();
     }
-
-
-
   }
 }

@@ -10,7 +10,7 @@ public class BibliotecaApp {
 
     library.addBook(new Book("Fahrenheit 451", "Ray Bradbury", 1953));
     library.addBook(new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969));
-    library.addBook(new Book("The Catcher in the Rye", "J.D. Salinger",  1951));
+    library.addBook(new Book("The Catcher in the Rye", "J.D. Salinger", 1951));
 
     menu.displayWelcomeMessage();
     menu.displayMenu();

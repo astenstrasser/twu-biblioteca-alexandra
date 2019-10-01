@@ -33,7 +33,7 @@ public class Console {
 
   public String askBookId() {
     String bookId;
-    try{
+    try {
       bookId = scanner.next();
     } catch (InputMismatchException e) {
       bookId = null;

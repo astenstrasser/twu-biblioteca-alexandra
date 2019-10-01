@@ -1,15 +1,8 @@
 package com.twu.biblioteca;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.UUID;
-
-import static com.sun.tools.doclint.Entity.empty;
-import static com.sun.tools.doclint.Entity.not;
-import static org.junit.Assert.*;
 
 public class BookTest {
 
@@ -17,9 +10,8 @@ public class BookTest {
 
   @Before
   public void setUp() {
-    book = new Book("The Catcher in the Rye", "J.D. Salinger",  1951);
+    book = new Book("The Catcher in the Rye", "J.D. Salinger", 1951);
   }
-
 
   @Test
   public void shouldReturnTitleAuthorIDAndPublicationYearWhenBookToStringIsCalled() {
@@ -37,10 +29,7 @@ public class BookTest {
   }
 
   @Test
-  public void bookShouldHaveAnUniqueId(){
+  public void bookShouldHaveAnUniqueId() {
     Assertions.assertThat(book.getId()).isNotNull();
   }
-
-
-
 }
