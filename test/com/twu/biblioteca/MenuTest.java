@@ -4,10 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.UUID;
 
 public class MenuTest {
 
@@ -37,23 +35,24 @@ public class MenuTest {
     // then
     Assertions.assertThat(gotOptions).contains("Menu of options");
     Assertions.assertThat(gotOptions).contains("1: View the list of all books");
+    Assertions.assertThat(gotOptions).contains("2: Checkout book");
     Assertions.assertThat(gotOptions).contains("0: Exit Biblioteca");
   }
 
   @Test
   public void shouldShowListOfBooks() {
     // given
+    byte[] userInput = "0".getBytes();
+    InputStream in = new ByteArrayInputStream(userInput);
+
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(outContent);
-
-    byte[] input = "1".getBytes();
-    InputStream in = new ByteArrayInputStream(input);
 
     Console console = new Console(in, out);
     Menu menu = new Menu(library, console);
 
     // when
-    menu.handleInput();
+    menu.handleInput(1);
 
     // then
     Assertions.assertThat(outContent.toString()).contains("Kurt Vonnegut");
@@ -61,26 +60,26 @@ public class MenuTest {
   }
 
   @Test
-  public void shouldReturnInvalidOptionWhenInputIsNotOnMenu() {
+  public void shouldAskWhichBookUserWantsToCheckoutWhenUserPicksCheckoutOptionOnMenu() {
     // given
+    String userInput = bookOne.getId().toString() + "\n0";
+    InputStream in = new ByteArrayInputStream(userInput.getBytes());
+
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(outContent);
-
-    byte[] input = "400\n0".getBytes();
-    InputStream in = new ByteArrayInputStream(input);
 
     Console console = new Console(in, out);
     Menu menu = new Menu(library, console);
 
     // when
-    menu.handleInput();
+    menu.handleInput(2);
 
     // then
-    Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
+    Assertions.assertThat(outContent.toString()).contains("Please write the ID of the book you want to checkout");
   }
 
   @Test
-  public void shouldExitWhenSelectedExitOptionOnMenu() {
+  public void shouldReturnInvalidOptionWhenInputIsNotOnMenu() {
     // given
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(outContent);
@@ -92,7 +91,23 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    menu.handleInput();
+    menu.handleInput(400);
+
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
+  }
+
+  @Test
+  public void shouldExitWhenSelectedExitOptionOnMenu() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    Console console = new Console(System.in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput(0);
 
     // then
     Assertions.assertThat(outContent.toString()).isEmpty();
@@ -111,9 +126,28 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    menu.handleInput();
+    menu.handleInput(console.ask());
 
     // then
     Assertions.assertThat(outContent.toString()).contains("Please select a valid option");
   }
+
+
+  @Test
+  public void shouldChangeBookStatusWhenCheckingOutABook(){
+    // given
+    String input = bookOne.getId().toString()+"\n0";
+    InputStream in = new ByteArrayInputStream(input.getBytes());
+
+    Console console = new Console(in, System.out);
+    Menu menu = new Menu(library, console);
+
+
+    // when
+    menu.handleInput(2);
+
+    // then
+    Assertions.assertThat(bookOne.isAvailable()).isEqualTo(false);
+  }
+
 }

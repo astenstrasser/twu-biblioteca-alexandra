@@ -30,4 +30,14 @@ public class Console {
     }
     return option;
   }
+
+  public String askBookId() {
+    String bookId;
+    try{
+      bookId = scanner.next();
+    } catch (InputMismatchException e) {
+      bookId = null;
+    }
+    return bookId;
+  }
 }

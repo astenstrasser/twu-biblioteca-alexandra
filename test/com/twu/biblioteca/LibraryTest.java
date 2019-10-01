@@ -38,4 +38,18 @@ public class LibraryTest {
     assertThat(books.get(1).getAuthor()).isEqualTo(BOOK_TWO.getAuthor());
     assertThat(books.size()).isEqualTo(2);
   }
+
+  @Test
+  public void shouldReturnJustAvailableBooks() {
+    // given
+    Library library = new Library();
+    library.addBook(BOOK_ONE);
+    library.addBook(BOOK_TWO);
+
+    // when
+    List<Book> got = library.getAvailableBooks();
+
+    // then
+    got.forEach(book -> Assertions.assertThat(book.isAvailable()).isEqualTo(true));
+  }
 }
