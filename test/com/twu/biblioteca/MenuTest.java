@@ -38,6 +38,7 @@ public class MenuTest {
     Assertions.assertThat(gotOptions).contains("Menu of options");
     Assertions.assertThat(gotOptions).contains("1: View the list of all books");
     Assertions.assertThat(gotOptions).contains("2: Checkout book");
+    Assertions.assertThat(gotOptions).contains("3: Return book");
     Assertions.assertThat(gotOptions).contains("0: Exit Biblioteca");
   }
 
@@ -80,6 +81,28 @@ public class MenuTest {
     Assertions.assertThat(outContent.toString())
         .contains("Please write the ID of the book you want to checkout");
   }
+
+  @Test
+  public void shouldAskForIdWhenReturningABook(){
+    // given
+    String userInput =  bookTwo.getId().toString() + "\n0";
+    InputStream in = new ByteArrayInputStream(userInput.getBytes());
+
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    library.checkoutBook(bookTwo.getId().toString());
+    menu.handleInput(3);
+
+    // then
+    Assertions.assertThat(outContent.toString())
+            .contains("Please write the ID of the book you want to return");
+  }
+
 
   @Test
   public void shouldReturnInvalidOptionWhenInputIsNotOnMenu() {
@@ -152,6 +175,23 @@ public class MenuTest {
   }
 
   @Test
+  public void shouldChangeBookStatusWhenReturningABook() {
+    // given
+    String input = bookOne.getId().toString() + "\n0";
+    InputStream in = new ByteArrayInputStream(input.getBytes());
+
+    Console console = new Console(in, System.out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    library.checkoutBook(bookTwo.getId().toString());
+    menu.handleInput(3);
+
+    // then
+    Assertions.assertThat(bookOne.isAvailable()).isEqualTo(true);
+  }
+
+  @Test
   public void shouldShowSuccessMessageOnCheckoutOfABook() {
     // given
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -168,5 +208,24 @@ public class MenuTest {
 
     // then
     Assertions.assertThat(outContent.toString()).contains("Thank you! Enjoy the book");
+  }
+
+  @Test
+  public void shouldThrowExceptionOnCheckoutOfABookWhenGivenBookIdIsNotValid() {
+    // given
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    String input = "thisIsNotValidId\n0";
+    InputStream in = new ByteArrayInputStream(input.getBytes());
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput(2);
+
+    // then
+    Assertions.assertThatExceptionOfType(Exception.class).isThrownBy(() -> menu.handleInput(2));
   }
 }

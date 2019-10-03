@@ -39,10 +39,28 @@ public class Library {
         book = b;
       }
     }
-    if (isBookOnLibrary == true) {
+    if (isBookOnLibrary == true && book.isAvailable()==true) {
       book.checkout();
     } else {
       throw new NoSuchElementException();
     }
+  }
+
+
+  public void returnBook(String bookId) {
+    boolean isBookOnLibrary = false;
+    Book book = null;
+    for (Book b : this.books) {
+      if ((b.getId().toString()).equals(bookId)) {
+        isBookOnLibrary = true;
+        book = b;
+      }
+    }
+    if (isBookOnLibrary == true && book.isAvailable()==false) {
+      book.returnBook();
+    } else {
+      throw new NoSuchElementException();
+    }
+
   }
 }

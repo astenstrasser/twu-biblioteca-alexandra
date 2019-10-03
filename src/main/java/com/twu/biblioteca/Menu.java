@@ -25,6 +25,7 @@ public class Menu {
     String options = "Menu of options:\n";
     options += "    1: View the list of all books\n";
     options += "    2: Checkout book\n";
+    options += "    3: Return book\n";
     options += "    0: Exit Biblioteca";
 
     return options;
@@ -46,10 +47,18 @@ public class Menu {
           library.checkoutBook(console.askBookId());
           console.write("Thank you! Enjoy the book\n");
         } catch (Exception e) {
-          console.write("No book found with given ID");
+          console.write("Sorry, that book is not available");
         }
         displayMenu();
         break;
+      case 3:
+        console.write("Please write the ID of the book you want to return");
+        try{
+            library.returnBook(console.askBookId());
+            console.write("Thank you for returning the book\n");
+          }catch (Exception e){
+          console.write("That is not a valid book to return");
+        }
       case Console.INVALID_INPUT:
         console.write("Invalid Option. Please select a valid option");
         displayMenu();

@@ -32,4 +32,17 @@ public class BookTest {
   public void bookShouldHaveAnUniqueId() {
     Assertions.assertThat(book.getId()).isNotNull();
   }
+
+  @Test
+  public void shouldSetBookStatusToAvailableWhenBookIsReturned(){
+    // given
+    book.checkout();
+
+    // when
+    book.returnBook();
+
+    // then
+    Assertions.assertThat(book.isAvailable()).isEqualTo(true);
+  }
+
 }
