@@ -53,12 +53,14 @@ public class Menu {
         break;
       case 3:
         console.write("Please write the ID of the book you want to return");
-        try{
-            library.returnBook(console.askBookId());
-            console.write("Thank you for returning the book\n");
-          }catch (Exception e){
+        try {
+          library.returnBook(console.askBookId());
+          console.write("Thank you for returning the book\n");
+        } catch (Exception e) {
           console.write("That is not a valid book to return");
         }
+        displayMenu();
+        break;
       case Console.INVALID_INPUT:
         console.write("Invalid Option. Please select a valid option");
         displayMenu();

@@ -50,17 +50,36 @@ public class Library {
   public void returnBook(String bookId) {
     boolean isBookOnLibrary = false;
     Book book = null;
-    for (Book b : this.books) {
-      if ((b.getId().toString()).equals(bookId)) {
-        isBookOnLibrary = true;
-        book = b;
-      }
+    if (isBookOnLibrary(bookId) == true){
+      book = searchBookById(bookId);
     }
-    if (isBookOnLibrary == true && book.isAvailable()==false) {
+
+    if (isBookOnLibrary(bookId) == true && book.isAvailable()==false) {
       book.returnBook();
     } else {
       throw new NoSuchElementException();
     }
 
   }
+
+  public Book searchBookById(String bookId){
+    Book book = null;
+    for (Book b : this.books) {
+      if ((b.getId().toString()).equals(bookId)) {
+        book = b;
+      }
+    }
+    return book ;
+  }
+
+  public boolean isBookOnLibrary(String bookId){
+    boolean isBookOnLibrary = false;
+    for (Book b : this.books) {
+      if ((b.getId().toString()).equals(bookId)) {
+        isBookOnLibrary = true;
+      }
+    }
+    return  isBookOnLibrary;
+  }
+
 }
