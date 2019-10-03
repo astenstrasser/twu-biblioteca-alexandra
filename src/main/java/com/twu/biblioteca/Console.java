@@ -20,24 +20,24 @@ public class Console {
     this.out.println(text);
   }
 
-  public int ask() {
-    int option;
+  public int askInt() {
+    int number;
     try {
-      option = scanner.nextInt();
+      number = scanner.nextInt();
     } catch (InputMismatchException e) {
-      option = INVALID_INPUT;
+      number = INVALID_INPUT;
       scanner.nextLine();
     }
-    return option;
+    return number;
   }
 
-  public String askBookId() {
-    String bookId;
+  public String askText() {
+    String text;
     try {
-      bookId = scanner.next();
+      text = scanner.next();
     } catch (InputMismatchException e) {
-      bookId = null;
+      text = null;
     }
-    return bookId;
+    return text;
   }
 }

@@ -83,9 +83,9 @@ public class MenuTest {
   }
 
   @Test
-  public void shouldAskForIdWhenReturningABook(){
+  public void shouldAskForIdWhenReturningABook() {
     // given
-    String userInput =  bookTwo.getId().toString() + "\n0";
+    String userInput = bookTwo.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(userInput.getBytes());
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -100,9 +100,8 @@ public class MenuTest {
 
     // then
     Assertions.assertThat(outContent.toString())
-            .contains("Please write the ID of the book you want to return");
+        .contains("Please write the ID of the book you want to return");
   }
-
 
   @Test
   public void shouldReturnInvalidOptionWhenInputIsNotOnMenu() {
@@ -152,7 +151,7 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    menu.handleInput(console.ask());
+    menu.handleInput(console.askInt());
 
     // then
     Assertions.assertThat(outContent.toString()).contains("Please select a valid option");

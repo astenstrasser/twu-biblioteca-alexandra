@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 
 public class Library {
 
+  //    TODO: testar funções da library separadamente
+
   private List<Book> books = new ArrayList<>();
 
   public void addBook(Book book) {
@@ -18,10 +20,12 @@ public class Library {
 
   public List<Book> getAvailableBooks() {
 
-    List<Book> availableBooks = new ArrayList<Book>();
+//    TODO: implementar usando stream
+
+    List<Book> availableBooks = new ArrayList<>();
 
     for (Book book : this.books) {
-      if (book.isAvailable() == true) {
+      if (book.isAvailable()) {
         availableBooks.add(book);
       }
     }
@@ -30,55 +34,48 @@ public class Library {
   }
 
   public void checkoutBook(String givenBookId) {
-
-    boolean isBookOnLibrary = false;
     Book book = null;
-    for (Book b : this.books) {
-      if ((b.getId().toString()).equals(givenBookId)) {
-        isBookOnLibrary = true;
-        book = b;
-      }
+    if (isBookOnLibrary(givenBookId)) {
+      book = searchBookById(givenBookId);
     }
-    if (isBookOnLibrary == true && book.isAvailable()==true) {
+
+    if (isBookOnLibrary(givenBookId) && book.isAvailable()) {
       book.checkout();
     } else {
       throw new NoSuchElementException();
     }
   }
 
-
   public void returnBook(String bookId) {
     Book book = null;
-    if (isBookOnLibrary(bookId) == true){
+    if (isBookOnLibrary(bookId)) {
       book = searchBookById(bookId);
     }
 
-    if (isBookOnLibrary(bookId) == true && book.isAvailable()==false) {
+    if (isBookOnLibrary(bookId) && !book.isAvailable()) {
       book.returnBook();
     } else {
       throw new NoSuchElementException();
     }
-
   }
 
-  public Book searchBookById(String bookId){
+  public Book searchBookById(String bookId) {
     Book book = null;
     for (Book b : this.books) {
       if ((b.getId().toString()).equals(bookId)) {
         book = b;
       }
     }
-    return book ;
+    return book;
   }
 
-  public boolean isBookOnLibrary(String bookId){
+  public boolean isBookOnLibrary(String bookId) {
     boolean isBookOnLibrary = false;
     for (Book b : this.books) {
       if ((b.getId().toString()).equals(bookId)) {
         isBookOnLibrary = true;
       }
     }
-    return  isBookOnLibrary;
+    return isBookOnLibrary;
   }
-
 }

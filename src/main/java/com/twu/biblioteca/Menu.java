@@ -18,7 +18,7 @@ public class Menu {
   public void displayMenu() {
     this.console.write(this.getOptions());
     this.console.write("Select option: ");
-    handleInput(this.console.ask());
+    handleInput(this.console.askInt());
   }
 
   public String getOptions() {
@@ -36,40 +36,49 @@ public class Menu {
     switch (option) {
       case 0:
         return;
+
       case 1:
         showBooks();
         console.write("\n-----------\n");
         displayMenu();
         break;
+
       case 2:
-        console.write("Please write the ID of the book you want to checkout");
-        try {
-          library.checkoutBook(console.askBookId());
-          console.write("Thank you! Enjoy the book\n");
-        } catch (Exception e) {
-          console.write("Sorry, that book is not available");
-        }
+        handleCheckout();
         displayMenu();
         break;
+
       case 3:
-        console.write("Please write the ID of the book you want to return");
-        try {
-          library.returnBook(console.askBookId());
-          console.write("Thank you for returning the book\n");
-        } catch (Exception e) {
-          console.write("That is not a valid book to return");
-        }
+        handleReturn();
         displayMenu();
         break;
-      case Console.INVALID_INPUT:
-        console.write("Invalid Option. Please select a valid option");
-        displayMenu();
-        break;
+
       default:
         console.write("Invalid Option. Please select a valid option");
         displayMenu();
         break;
     }
+  }
+
+  private void handleReturn() {
+    console.write("Please write the ID of the book you want to return");
+    try {
+      library.returnBook(console.askText());
+      console.write("Thank you for returning the book\n");
+    } catch (Exception e) {
+      console.write("That is not a valid book to return\n");
+    }
+  }
+
+  private void handleCheckout() {
+    console.write("Please write the ID of the book you want to checkout");
+    try {
+      library.checkoutBook(console.askText());
+      console.write("Thank you! Enjoy the book\n");
+    } catch (Exception e) {
+      console.write("Sorry, that book is not available\n");
+    }
+    return;
   }
 
   private void showBooks() {
