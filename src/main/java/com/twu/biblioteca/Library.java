@@ -48,7 +48,6 @@ public class Library {
 
 
   public void returnBook(String bookId) {
-    boolean isBookOnLibrary = false;
     Book book = null;
     if (isBookOnLibrary(bookId) == true){
       book = searchBookById(bookId);
