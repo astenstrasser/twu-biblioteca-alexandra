@@ -3,10 +3,9 @@ package com.twu.biblioteca;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class Library {
-
-  //    TODO: testar funções da library separadamente
 
   private List<Book> books = new ArrayList<>();
 
@@ -19,18 +18,7 @@ public class Library {
   }
 
   public List<Book> getAvailableBooks() {
-
-//    TODO: implementar usando stream
-
-    List<Book> availableBooks = new ArrayList<>();
-
-    for (Book book : this.books) {
-      if (book.isAvailable()) {
-        availableBooks.add(book);
-      }
-    }
-
-    return availableBooks;
+    return this.books.stream().filter(Book::isAvailable).collect(Collectors.toList());
   }
 
   public void checkoutBook(String givenBookId) {
@@ -52,7 +40,7 @@ public class Library {
       book = searchBookById(bookId);
     }
 
-    if (isBookOnLibrary(bookId) && !book.isAvailable()) {
+    if (book != null && !book.isAvailable()) {
       book.returnBook();
     } else {
       throw new NoSuchElementException();
@@ -60,22 +48,20 @@ public class Library {
   }
 
   public Book searchBookById(String bookId) {
-    Book book = null;
-    for (Book b : this.books) {
-      if ((b.getId().toString()).equals(bookId)) {
-        book = b;
-      }
-    }
-    return book;
+    return this.books.stream()
+        .filter(b -> b.getId().toString().equals(bookId))
+        .findAny()
+        .orElse(null);
   }
 
   public boolean isBookOnLibrary(String bookId) {
-    boolean isBookOnLibrary = false;
-    for (Book b : this.books) {
-      if ((b.getId().toString()).equals(bookId)) {
-        isBookOnLibrary = true;
-      }
+    boolean isBookOnLibrary =
+        !(this.books.stream().filter(b -> b.getId().toString().equals(bookId)).count() == 0);
+
+    if (isBookOnLibrary) {
+      return true;
+    } else {
+      return false;
     }
-    return isBookOnLibrary;
   }
 }
