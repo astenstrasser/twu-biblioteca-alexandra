@@ -4,8 +4,6 @@ import java.util.UUID;
 
 public interface LibraryItem {
 
-  public String getType();
-
   public String getTitle();
 
   public int getPublicationYear();
@@ -20,5 +18,5 @@ public interface LibraryItem {
 
   public void checkout();
 
-  public void returnBook();
+  public void returnToLibrary();
 }

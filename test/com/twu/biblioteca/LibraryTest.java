@@ -23,7 +23,7 @@ public class LibraryTest {
     Library library = new Library();
 
     // when
-    library.addBook(BOOK_ONE);
+    library.addLibraryItem(BOOK_ONE);
 
     // then
     assertThat(library.getBooks()).containsOnly(BOOK_ONE);
@@ -35,8 +35,8 @@ public class LibraryTest {
     Library library = new Library();
 
     // when
-    library.addBook(BOOK_ONE);
-    library.addBook(BOOK_TWO);
+    library.addLibraryItem(BOOK_ONE);
+    library.addLibraryItem(BOOK_TWO);
     List<Book> books = library.getBooks();
 
     // then
@@ -49,8 +49,8 @@ public class LibraryTest {
   public void shouldReturnJustAvailableBooksWhenGetAvailableBooks() {
     // given
     Library library = new Library();
-    library.addBook(BOOK_ONE);
-    library.addBook(BOOK_TWO);
+    library.addLibraryItem(BOOK_ONE);
+    library.addLibraryItem(BOOK_TWO);
 
     // when
     List<Book> got = library.getAvailableBooks();
@@ -69,8 +69,8 @@ public class LibraryTest {
     Mockito.when(mockBook.getId()).thenReturn(id);
 
     // when
-    library.addBook(mockBook);
-    library.checkoutBook(id.toString());
+    library.addLibraryItem(mockBook);
+    library.checkoutItem(id.toString());
 
     // then
     Mockito.verify(mockBook).checkout();
@@ -84,13 +84,13 @@ public class LibraryTest {
     Mockito.when(mockBook.getId()).thenReturn(id);
 
     // when
-    library.addBook(mockBook);
+    library.addLibraryItem(mockBook);
     mockBook.checkout();
-    library.returnBook(id.toString());
+    library.returnItem(id.toString());
 
     // then
     Assertions.assertThat(mockBook.isAvailable()).isEqualTo(true);
-    Mockito.verify(mockBook).returnBook();
+    Mockito.verify(mockBook).returnToLibrary();
   }
 
   @Test
@@ -100,7 +100,7 @@ public class LibraryTest {
     String nonExistentId = "NonExistentId012345";
 
     // when
-    Book got = library.searchBookById(nonExistentId);
+    Book got = (Book) library.searchItemById(nonExistentId);
 
     // then
     Assertions.assertThat(got).isEqualTo(null);
@@ -114,8 +114,8 @@ public class LibraryTest {
     UUID bookId = book.getId();
 
     // when
-    library.addBook(book);
-    Book got = library.searchBookById(bookId.toString());
+    library.addLibraryItem(book);
+    Book got = (Book) library.searchItemById(bookId.toString());
 
     // then
     Assertions.assertThat(got).isEqualTo(book);
@@ -129,10 +129,10 @@ public class LibraryTest {
     String bookId = book.getId().toString();
 
     // when
-    library.addBook(book);
+    library.addLibraryItem(book);
 
     // then
-    Assertions.assertThat(library.isBookOnLibrary(bookId)).isEqualTo(true);
+    Assertions.assertThat(library.isItemOnLibrary(bookId)).isEqualTo(true);
   }
 
   @Test
@@ -142,7 +142,7 @@ public class LibraryTest {
     String bookId = UUID.randomUUID().toString();
 
     // when
-    Boolean got = library.isBookOnLibrary(bookId);
+    Boolean got = library.isItemOnLibrary(bookId);
 
     // then
     Assertions.assertThat(got).isEqualTo(false);

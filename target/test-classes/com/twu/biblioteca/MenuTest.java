@@ -21,8 +21,8 @@ public class MenuTest {
     this.bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
     this.bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
 
-    library.addBook(bookOne);
-    library.addBook(bookTwo);
+    library.addLibraryItem(bookOne);
+    library.addLibraryItem(bookTwo);
   }
 
   @Test
@@ -101,7 +101,7 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    library.checkoutBook(bookTwo.getId().toString());
+    library.checkoutItem(bookTwo.getId().toString());
     menu.handleInput(3);
 
     // then
@@ -195,7 +195,7 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    library.checkoutBook(bookTwo.getId().toString());
+    library.checkoutItem(bookTwo.getId().toString());
     menu.handleInput(3);
 
     // then

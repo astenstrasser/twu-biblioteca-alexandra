@@ -8,9 +8,9 @@ public class BibliotecaApp {
     Console console = new Console(System.in, System.out);
     Menu menu = new Menu(library, console);
 
-    library.addBook(new Book("Fahrenheit 451", "Ray Bradbury", 1953));
-    library.addBook(new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969));
-    library.addBook(new Book("The Catcher in the Rye", "J.D. Salinger", 1951));
+    library.addLibraryItem(new Book("Fahrenheit 451", "Ray Bradbury", 1953));
+    library.addLibraryItem(new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969));
+    library.addLibraryItem(new Book("The Catcher in the Rye", "J.D. Salinger", 1951));
 
     menu.displayWelcomeMessage();
     menu.displayMenu();

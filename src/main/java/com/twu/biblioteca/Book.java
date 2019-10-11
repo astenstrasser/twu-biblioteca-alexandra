@@ -23,10 +23,6 @@ public class Book implements LibraryItem {
     this.isAvailable = true;
   }
 
-  public String getType(){
-    return "Book";
-  }
-
   public String getAuthor() {
     return author;
   }
@@ -57,7 +53,7 @@ public class Book implements LibraryItem {
     this.isAvailable = false;
   }
 
-  public void returnBook() {
+  public void returnToLibrary() {
     this.isAvailable = true;
   }
 

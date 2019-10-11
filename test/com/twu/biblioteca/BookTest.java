@@ -39,7 +39,7 @@ public class BookTest {
     book.checkout();
 
     // when
-    book.returnBook();
+    book.returnToLibrary();
 
     // then
     Assertions.assertThat(book.isAvailable()).isEqualTo(true);

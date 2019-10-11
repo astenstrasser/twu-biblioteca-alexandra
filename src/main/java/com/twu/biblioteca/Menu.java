@@ -63,7 +63,7 @@ public class Menu {
   private void handleReturn() {
     console.write("Please write the ID of the book you want to return");
     try {
-      library.returnBook(console.askText());
+      library.returnItem(console.askText());
       console.write("Thank you for returning the book\n");
     } catch (Exception e) {
       console.write("That is not a valid book to return\n");
@@ -73,7 +73,7 @@ public class Menu {
   private void handleCheckout() {
     console.write("Please write the ID of the book you want to checkout");
     try {
-      library.checkoutBook(console.askText());
+      library.checkoutItem(console.askText());
       console.write("Thank you! Enjoy the book\n");
     } catch (Exception e) {
       console.write("Sorry, that book is not available\n");

@@ -20,11 +20,15 @@ public class Library {
     return this.libraryItems;
   }
 
-  public List<LibraryItem> getBooks() {
-    List<LibraryItem> books =
+  public List<Book> getBooks() {
+
+    List<Book> books = null;
+
+    books =
         this.libraryItems.stream()
-            .filter(item -> item.getType().equals("Book"))
-            .collect(toList());
+            .filter(item -> item instanceof Book)
+            .map(item -> (Book) item)
+            .collect(Collectors.toList());
     return books;
   }
 
@@ -32,44 +36,44 @@ public class Library {
     return getBooks().stream().filter(Book::isAvailable).collect(toList());
   }
 
-  public void checkoutBook(String givenBookId) {
-    Book book = null;
-    if (isBookOnLibrary(givenBookId)) {
-      book = searchBookById(givenBookId);
+  public void checkoutItem(String id) {
+    LibraryItem libraryItem = null;
+    if (isItemOnLibrary(id)) {
+      libraryItem = searchItemById(id);
     }
 
-    if (isBookOnLibrary(givenBookId) && book.isAvailable()) {
-      book.checkout();
+    if (isItemOnLibrary(id) && libraryItem.isAvailable()) {
+      libraryItem.checkout();
     } else {
       throw new NoSuchElementException();
     }
   }
 
-  public void returnBook(String bookId) {
-    Book book = null;
-    if (isBookOnLibrary(bookId)) {
-      book = searchBookById(bookId);
+  public void returnItem(String id) {
+    LibraryItem item = null;
+    if (isItemOnLibrary(id)) {
+      item = searchItemById(id);
     }
 
-    if (book != null && !book.isAvailable()) {
-      book.returnBook();
+    if (item != null && !item.isAvailable()) {
+      item.returnToLibrary();
     } else {
       throw new NoSuchElementException();
     }
   }
 
-  public Book searchBookById(String bookId) {
-    return this.books.stream()
-        .filter(b -> b.getId().toString().equals(bookId))
+  public LibraryItem searchItemById(String itemId) {
+    return this.libraryItems.stream()
+        .filter(b -> b.getId().toString().equals(itemId))
         .findAny()
         .orElse(null);
   }
 
-  public boolean isBookOnLibrary(String bookId) {
-    boolean isBookOnLibrary =
-        !(this.books.stream().filter(b -> b.getId().toString().equals(bookId)).count() == 0);
+  public boolean isItemOnLibrary(String id) {
+    boolean isItemOnLibrary =
+        !(this.libraryItems.stream().filter(b -> b.getId().toString().equals(id)).count() == 0);
 
-    if (isBookOnLibrary) {
+    if (isItemOnLibrary) {
       return true;
     } else {
       return false;
