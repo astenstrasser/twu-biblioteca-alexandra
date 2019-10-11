@@ -2,7 +2,7 @@ package com.twu.biblioteca;
 
 import java.util.UUID;
 
-public class Book {
+public class Book implements LibraryItem {
 
   private String title;
   private String author;
@@ -16,6 +16,15 @@ public class Book {
     this.publicationYear = publicationYear;
     this.id = UUID.randomUUID();
     this.isAvailable = true;
+  }
+
+  public Book() {
+    this.id = UUID.randomUUID();
+    this.isAvailable = true;
+  }
+
+  public String getType(){
+    return "Book";
   }
 
   public String getAuthor() {
@@ -51,4 +60,5 @@ public class Book {
   public void returnBook() {
     this.isAvailable = true;
   }
+
 }
