@@ -12,17 +12,20 @@ import java.io.PrintStream;
 public class MenuTest {
 
   private Library library;
-  private Book bookOne;
-  private Book bookTwo;
+  private Book BOOK_ONE = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
+  private Book BOOK_TWO = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
+  private Movie MOVIE_ONE = new Movie("Fight Club", "David Fincher", 1999, 8.8);
+  private Movie MOVIE_TWO =
+      new Movie("The Matrix", "Lana Wachowski and Lilly Wachowski", 1999, 8.7);
 
   @Before
   public void TestSetup() {
     this.library = new Library();
-    this.bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
-    this.bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
 
-    library.addLibraryItem(bookOne);
-    library.addLibraryItem(bookTwo);
+    library.addLibraryItem(BOOK_ONE);
+    library.addLibraryItem(BOOK_TWO);
+    library.addLibraryItem(MOVIE_ONE);
+    library.addLibraryItem(MOVIE_TWO);
   }
 
   @Test
@@ -45,6 +48,7 @@ public class MenuTest {
     Assertions.assertThat(gotOptions).contains("1: View the list of all books");
     Assertions.assertThat(gotOptions).contains("2: Checkout book");
     Assertions.assertThat(gotOptions).contains("3: Return book");
+    Assertions.assertThat(gotOptions).contains("4: View the list of all movies");
     Assertions.assertThat(gotOptions).contains("0: Exit Biblioteca");
   }
 
@@ -71,7 +75,7 @@ public class MenuTest {
   @Test
   public void shouldAskWhichBookUserWantsToCheckoutWhenUserPicksCheckoutOptionOnMenu() {
     // given
-    String userInput = bookOne.getId().toString() + "\n0";
+    String userInput = BOOK_ONE.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(userInput.getBytes());
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -91,7 +95,7 @@ public class MenuTest {
   @Test
   public void shouldAskForIdWhenReturningABook() {
     // given
-    String userInput = bookTwo.getId().toString() + "\n0";
+    String userInput = BOOK_TWO.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(userInput.getBytes());
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -101,7 +105,7 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    library.checkoutItem(bookTwo.getId().toString());
+    library.checkoutItem(BOOK_TWO.getId().toString());
     menu.handleInput(3);
 
     // then
@@ -166,7 +170,7 @@ public class MenuTest {
   @Test
   public void shouldChangeBookStatusWhenCheckingOutABook() {
     // given
-    String input = bookOne.getId().toString() + "\n0";
+    String input = BOOK_ONE.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(input.getBytes());
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -179,13 +183,13 @@ public class MenuTest {
     menu.handleInput(2);
 
     // then
-    Assertions.assertThat(bookOne.isAvailable()).isEqualTo(false);
+    Assertions.assertThat(BOOK_ONE.isAvailable()).isEqualTo(false);
   }
 
   @Test
   public void shouldChangeBookStatusWhenReturningABook() {
     // given
-    String input = bookOne.getId().toString() + "\n0";
+    String input = BOOK_ONE.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(input.getBytes());
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -195,11 +199,11 @@ public class MenuTest {
     Menu menu = new Menu(library, console);
 
     // when
-    library.checkoutItem(bookTwo.getId().toString());
+    library.checkoutItem(BOOK_ONE.getId().toString());
     menu.handleInput(3);
 
     // then
-    Assertions.assertThat(bookOne.isAvailable()).isEqualTo(true);
+    Assertions.assertThat(BOOK_ONE.isAvailable()).isEqualTo(true);
   }
 
   @Test
@@ -208,7 +212,7 @@ public class MenuTest {
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(outContent);
 
-    String input = bookOne.getId().toString() + "\n0";
+    String input = BOOK_ONE.getId().toString() + "\n0";
     InputStream in = new ByteArrayInputStream(input.getBytes());
 
     Console console = new Console(in, out);
@@ -238,5 +242,45 @@ public class MenuTest {
 
     // then
     Assertions.assertThatExceptionOfType(Exception.class).isThrownBy(() -> menu.handleInput(2));
+  }
+
+  @Test
+  public void shouldShowTheListOfAllMovies() {
+    // given
+    byte[] userInput = "0".getBytes();
+    InputStream in = new ByteArrayInputStream(userInput);
+
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput(4);
+
+    // then
+    Assertions.assertThat(outContent.toString()).contains("Fight Club");
+    Assertions.assertThat(outContent.toString()).contains("The Matrix");
+  }
+
+  @Test
+  public void shouldNotShowAnyBooksWhenShowListOfMovies() {
+    // given
+    byte[] userInput = "0".getBytes();
+    InputStream in = new ByteArrayInputStream(userInput);
+
+    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(outContent);
+
+    Console console = new Console(in, out);
+    Menu menu = new Menu(library, console);
+
+    // when
+    menu.handleInput(4);
+
+    // then
+    Assertions.assertThat(outContent.toString()).doesNotContain("Kurt Vonnegut");
+    Assertions.assertThat(outContent.toString()).doesNotContain("Ray Bradbury");
   }
 }

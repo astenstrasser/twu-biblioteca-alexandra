@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -14,13 +15,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LibraryTest {
+
   private static final Book BOOK_ONE = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
   private static final Book BOOK_TWO = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
+
+  private static final Movie MOVIE_ONE = new Movie("Fight Club", "David Fincher", 1999,  8.8);
+  private static final Movie MOVIE_TWO =  new Movie("The Matrix",  "Lana Wachowski and Lilly Wachowski", 1999,  8.7);
+
+  private Library library;
+
+  @Before
+  public void setUp() {
+    library = new Library();
+  }
 
   @Test
   public void AddBookToLibrary() {
     // given
-    Library library = new Library();
 
     // when
     library.addLibraryItem(BOOK_ONE);
@@ -32,7 +43,6 @@ public class LibraryTest {
   @Test
   public void shouldReturnListOfAllBooksWhenGetBooks() {
     // given
-    Library library = new Library();
 
     // when
     library.addLibraryItem(BOOK_ONE);
@@ -48,7 +58,6 @@ public class LibraryTest {
   @Test
   public void shouldReturnJustAvailableBooksWhenGetAvailableBooks() {
     // given
-    Library library = new Library();
     library.addLibraryItem(BOOK_ONE);
     library.addLibraryItem(BOOK_TWO);
 
@@ -64,7 +73,6 @@ public class LibraryTest {
   @Test
   public void shouldCheckoutBookWhenBookIsAvailableOnLibrary() {
     // given
-    Library library = new Library();
     UUID id = UUID.randomUUID();
     Mockito.when(mockBook.getId()).thenReturn(id);
 
@@ -79,7 +87,6 @@ public class LibraryTest {
   @Test
   public void shouldReturnBookWhenBookIsNotAvailableOnLibrary() {
     // given
-    Library library = new Library();
     UUID id = UUID.randomUUID();
     Mockito.when(mockBook.getId()).thenReturn(id);
 
@@ -96,7 +103,6 @@ public class LibraryTest {
   @Test
   public void shouldReturnNoneWhenSearchBookByNonExistentId() {
     // given
-    Library library = new Library();
     String nonExistentId = "NonExistentId012345";
 
     // when
@@ -109,7 +115,6 @@ public class LibraryTest {
   @Test
   public void shouldReturnBookWhenSearchedBookIsOnLibrary() {
     // given
-    Library library = new Library();
     Book book = new Book();
     UUID bookId = book.getId();
 
@@ -124,7 +129,6 @@ public class LibraryTest {
   @Test
   public void shouldFindBookIfBookIsOnLibrary() {
     // given
-    Library library = new Library();
     Book book = new Book();
     String bookId = book.getId().toString();
 
@@ -138,7 +142,6 @@ public class LibraryTest {
   @Test
   public void shouldNotFindBookIfBookIsNotLibrary() {
     // given
-    Library library = new Library();
     String bookId = UUID.randomUUID().toString();
 
     // when
@@ -146,5 +149,17 @@ public class LibraryTest {
 
     // then
     Assertions.assertThat(got).isEqualTo(false);
+  }
+
+  @Test
+  public void shouldBeAbleToAddMoviesToLibrary() {
+    // given
+
+    // when
+    library.addLibraryItem(MOVIE_ONE);
+
+    // then
+    Assertions.assertThat(library.getMovies().size()).isEqualTo(1);
+    Assertions.assertThat(library.getLibraryItems().size()).isEqualTo(1);
   }
 }

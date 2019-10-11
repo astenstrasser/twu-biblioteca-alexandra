@@ -26,6 +26,7 @@ public class Menu {
     options += "    1: View the list of all books\n";
     options += "    2: Checkout book\n";
     options += "    3: Return book\n";
+    options += "    4: View the list of all movies\n";
     options += "    0: Exit Biblioteca";
 
     return options;
@@ -39,7 +40,7 @@ public class Menu {
 
       case 1:
         showBooks();
-        console.write("\n-----------\n");
+        console.addSeparator();
         displayMenu();
         break;
 
@@ -53,11 +54,27 @@ public class Menu {
         displayMenu();
         break;
 
+      case 4:
+        showMovies();
+        console.addSeparator();
+        displayMenu();
+        break;
+
       default:
         console.write("Invalid Option. Please select a valid option");
         displayMenu();
         break;
     }
+  }
+
+  private void showMovies() {
+    this.console.write("Movies:\n");
+    library
+        .getAvailableMovies()
+        .forEach(
+            movie -> {
+              this.console.write(movie.toString());
+            });
   }
 
   private void handleReturn() {
@@ -82,6 +99,7 @@ public class Menu {
   }
 
   private void showBooks() {
+    this.console.write("Books:\n");
     library
         .getAvailableBooks()
         .forEach(

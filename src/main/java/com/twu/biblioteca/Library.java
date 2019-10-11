@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public class Library {
   }
 
   public List<Book> getBooks() {
-
     List<Book> books = null;
 
     books =
@@ -32,8 +32,24 @@ public class Library {
     return books;
   }
 
+  public List<Movie> getMovies() {
+    List<Movie> movies = null;
+
+    movies =
+        this.libraryItems.stream()
+            .filter(item -> item instanceof Movie)
+            .map(item -> (Movie) item)
+            .collect(Collectors.toList());
+
+    return movies;
+  }
+
   public List<Book> getAvailableBooks() {
     return getBooks().stream().filter(Book::isAvailable).collect(toList());
+  }
+
+  public List<Movie> getAvailableMovies() {
+    return getMovies().stream().filter(Movie::isAvailable).collect(toList());
   }
 
   public void checkoutItem(String id) {

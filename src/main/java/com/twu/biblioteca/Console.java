@@ -20,6 +20,10 @@ public class Console {
     this.out.println(text);
   }
 
+  public void addSeparator(){
+    this.write("\n-----------\n");
+  }
+
   public int askInt() {
     int number;
     try {
