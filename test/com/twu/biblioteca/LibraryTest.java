@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class LibraryTest {
 
-  private static final Book BOOK_ONE = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
-  private static final Book BOOK_TWO = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
+  private static  Book bookOne = new Book("Fahrenheit 451", "Ray Bradbury", 1953);
+  private static  Book bookTwo = new Book("Slaughterhouse-Five", "Kurt Vonnegut", 1969);
 
-  private static final Movie MOVIE_ONE = new Movie("Fight Club", "David Fincher", 1999,  8.8);
-  private static final Movie MOVIE_TWO =  new Movie("The Matrix",  "Lana Wachowski and Lilly Wachowski", 1999,  8.7);
+  private static  Movie movieOne = new Movie("Fight Club", "David Fincher", 1999,  8.8);
+  private static  Movie movieTwo =  new Movie("The Matrix",  "Lana Wachowski and Lilly Wachowski", 1999,  8.7);
 
   private Library library;
 
@@ -34,10 +34,10 @@ public class LibraryTest {
     // given
 
     // when
-    library.addLibraryItem(BOOK_ONE);
+    library.addLibraryItem(bookOne);
 
     // then
-    assertThat(library.getBooks()).containsOnly(BOOK_ONE);
+    assertThat(library.getBooks()).containsOnly(bookOne);
   }
 
   @Test
@@ -45,21 +45,21 @@ public class LibraryTest {
     // given
 
     // when
-    library.addLibraryItem(BOOK_ONE);
-    library.addLibraryItem(BOOK_TWO);
+    library.addLibraryItem(bookOne);
+    library.addLibraryItem(bookTwo);
     List<Book> books = library.getBooks();
 
     // then
-    assertThat(books.get(0).getAuthor()).isEqualTo(BOOK_ONE.getAuthor());
-    assertThat(books.get(1).getAuthor()).isEqualTo(BOOK_TWO.getAuthor());
+    assertThat(books.get(0).getAuthor()).isEqualTo(bookOne.getAuthor());
+    assertThat(books.get(1).getAuthor()).isEqualTo(bookTwo.getAuthor());
     assertThat(books.size()).isEqualTo(2);
   }
 
   @Test
   public void shouldReturnJustAvailableBooksWhenGetAvailableBooks() {
     // given
-    library.addLibraryItem(BOOK_ONE);
-    library.addLibraryItem(BOOK_TWO);
+    library.addLibraryItem(bookOne);
+    library.addLibraryItem(bookTwo);
 
     // when
     List<Book> got = library.getAvailableBooks();
@@ -156,10 +156,23 @@ public class LibraryTest {
     // given
 
     // when
-    library.addLibraryItem(MOVIE_ONE);
+    library.addLibraryItem(movieOne);
 
     // then
     Assertions.assertThat(library.getMovies().size()).isEqualTo(1);
     Assertions.assertThat(library.getLibraryItems().size()).isEqualTo(1);
+  }
+
+  @Test
+  public void shouldCheckoutMovie(){
+    // given
+
+    // when
+    library.addLibraryItem(movieOne);
+    String id = movieOne.getId().toString();
+    library.checkoutItem(id);
+
+    // then
+    Assertions.assertThat(movieOne.isAvailable()).isEqualTo(false);
   }
 }

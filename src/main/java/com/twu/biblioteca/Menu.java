@@ -24,9 +24,9 @@ public class Menu {
   public String getOptions() {
     String options = "Menu of options:\n";
     options += "    1: View the list of all books\n";
-    options += "    2: Checkout book\n";
-    options += "    3: Return book\n";
-    options += "    4: View the list of all movies\n";
+    options += "    2: View the list of all movies\n";
+    options += "    3: Checkout item\n";
+    options += "    4: Return item\n";
     options += "    0: Exit Biblioteca";
 
     return options;
@@ -45,18 +45,18 @@ public class Menu {
         break;
 
       case 2:
-        handleCheckout();
+        showMovies();
+        console.addSeparator();
         displayMenu();
         break;
 
       case 3:
-        handleReturn();
+        handleCheckout();
         displayMenu();
         break;
 
       case 4:
-        showMovies();
-        console.addSeparator();
+        handleReturn();
         displayMenu();
         break;
 
@@ -78,22 +78,22 @@ public class Menu {
   }
 
   private void handleReturn() {
-    console.write("Please write the ID of the book you want to return");
+    console.write("Please write the ID of the item you want to return");
     try {
       library.returnItem(console.askText());
-      console.write("Thank you for returning the book\n");
+      console.write("Thank you for returning the item\n");
     } catch (Exception e) {
-      console.write("That is not a valid book to return\n");
+      console.write("That is not a valid item to return\n");
     }
   }
 
   private void handleCheckout() {
-    console.write("Please write the ID of the book you want to checkout");
+    console.write("Please write the ID of the item you want to checkout");
     try {
       library.checkoutItem(console.askText());
-      console.write("Thank you! Enjoy the book\n");
+      console.write("Thank you! Enjoy!\n");
     } catch (Exception e) {
-      console.write("Sorry, that book is not available\n");
+      console.write("Sorry, that item is not available\n");
     }
     return;
   }
